@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Youssef IQ Quiz</title>
+    <style>
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to right, #4facfe, #00f2fe);
+            text-align: center;
+            margin: 0;
+            padding: 20px;
+            color: #fff;
+        }
+        .quiz-container {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+            max-width: 600px;
+            margin: auto;
+            color: #333;
+        }
+        h1 {
+            font-size: 28px;
+        }
+        .question {
+            font-size: 20px;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+        .options button {
+            display: block;
+            width: 100%;
+            padding: 12px;
+            margin: 8px 0;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+        .options button:hover {
+            background: #0056b3;
+        }
+        #next-btn {
+            display: none;
+            margin-top: 20px;
+            padding: 12px;
+            background: #28a745;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background 0.3s;
+            font-size: 16px;
+        }
+        #next-btn:hover {
+            background: #218838;
+        }
+        #feedback {
+            margin-top: 10px;
+            font-weight: bold;
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="quiz-container">
+        <h1>Youssef IQ Quiz</h1>
+        <div id="question-container">
+            <p class="question" id="question"></p>
+            <div class="options" id="options"></div>
+            <p id="feedback"></p>
+            <button id="next-btn" onclick="nextQuestion()">Next Question</button>
+        </div>
+    </div>
+
+    <script>
+        const quizData = [
+            { 
+                question: "What is the next number in the sequence: 2, 6, 12, 20, ?", 
+                options: ["28", "30", "32", "34"], 
+                correct: "30" 
+            },
+            { 
+                question: "Which shape has the most sides?", 
+                options: ["Hexagon", "Octagon", "Decagon", "Dodecagon"], 
+                correct: "Dodecagon" 
+            }
+        ];
+        
+        let currentQuestionIndex = 0;
+        let attempts = 0;
+
+        function loadQuestion() {
+            const currentQuestion = quizData[currentQuestionIndex];
+            document.getElementById("question").innerText = currentQuestion.question;
+            document.getElementById("feedback").innerText = "";
+            const optionsContainer = document.getElementById("options");
+            optionsContainer.innerHTML = "";
+            
+            currentQuestion.options.forEach(option => {
+                const button = document.createElement("button");
+                button.innerText = option;
+                button.onclick = () => checkAnswer(option);
+                optionsContainer.appendChild(button);
+            });
+        }
+
+        function checkAnswer(selectedOption) {
+            const currentQuestion = quizData[currentQuestionIndex];
+            if (selectedOption === currentQuestion.correct) {
+                document.getElementById("feedback").innerText = "Correct!";
+                document.getElementById("feedback").style.color = "green";
+                document.getElementById("next-btn").style.display = "block";
+            } else {
+                attempts++;
+                if (attempts >= 2) {
+                    document.getElementById("feedback").innerText = "Incorrect. The correct answer is: " + currentQuestion.correct;
+                    document.getElementById("feedback").style.color = "red";
+                    document.getElementById("next-btn").style.display = "block";
+                } else {
+                    document.getElementById("feedback").innerText = "Incorrect! Try again.";
+                }
+            }
+        }
+
+        function nextQuestion() {
+            attempts = 0;
+            currentQuestionIndex++;
+            if (currentQuestionIndex < quizData.length) {
+                document.getElementById("next-btn").style.display = "none";
+                loadQuestion();
+            } else {
+                document.getElementById("question-container").innerHTML = "<h2>Quiz Completed!</h2>";
+            }
+        }
+
+        loadQuestion();
+    </script>
+</body>
+</html>
